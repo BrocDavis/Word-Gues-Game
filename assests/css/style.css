@@ -1,0 +1,15 @@
+html{
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../images/Lake.jpg');
+    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+    background-repeat: no-repeat;
+}
+
+body{
+    color:white;
+}
+
+#correctWord {
+    letter-spacing: 5px;
+}
