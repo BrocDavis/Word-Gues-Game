@@ -1,55 +1,86 @@
 var wordBank = ["boat", "water", "ski", "wakebord", "float", "swim", "tube", "anchor", "waves", ""];
-var wrongLetters = [];
-var userGuess = [];
-var letterGuess;
+var maxGuess = 10;
+var gameStop = false;
 
+var guessedLetters = [];
+var guessingWord = [];
+var wordToMatch;
+var numGuess;
 var winCount = 0;
-var lostCount = 0;
-var maxGuess = 7;
-var gameRun = true;
 
-//call at beginning and end of code win or lose to rest game and change word
-function reset() {
-    correctWord = wordBank[Math.floor(Math.random() * wordBank.length)];
-    winCount = document.getElementById("wins").innerHTML;
-    maxGuess = document.getElementById("guess-count");
-    correctWord = document.getElementById("correct-word");
-    userGuess = document.getElementById("letters-guessed");
-}
-//calling function to reset game upon load
 reset();
+document.onkeypress = function (event) {
 
-//function checking for button press if its a letter only
-var isCharacter = function (ch) {
+    if (isAlpha(event.key) && !gameStop) {
+        checkForLetter(event.key.toUpperCase());
+    }
+}
+
+function checkForLetter(letter) {
+    var foundLetter = false;
+
+    for (var i = 0, j = wordToMatch.length; i < j; i++) {
+        if (letter === wordToMatch[i]) {
+            guessingWord[i] = letter;
+            foundLetter = true;
+
+
+            if (guessingWord.join("") === wordToMatch) {
+                winCount++;
+                gameStop = true;
+                updateDisplay();
+                setTimeout(reset, 3000);
+            }
+        }
+    }
+
+    if (!foundLetter) {
+
+        if (!guessedLetters.includes(letter)) {
+
+            guessedLetters.push(letter);
+            numGuess--;
+        }
+        if (numGuess === 0) {
+            guessingWord = wordToMatch.split();
+            gameStop = true;
+            setTimeout(reset, 3000);
+        }
+    }
+    updateDisplay();
+}
+
+function isAlpha(ch) {
     return /^[A-Z]$/i.test(ch);
 }
 
-//once button is pressed pass in game logic
-document.onkeypress = function (event) {
+function reset() {
+    numGuess = maxGuess;
+    gameStop = false;
 
-    //making any guess from input change to uppercase
-    if (isCharacter(event.key) && gameRun) {
-        letterPressed(event.key.toUpperCase());
-        console.log(event.key)
-    }
-}
+    wordToMatch = wordBank[Math.floor(Math.random() * wordBank.length)].toUpperCase();
+    console.log(wordToMatch);
 
-function letterPressed(letter){
-    var letterPressed = false;
+    guessedLetters = [];
+    guessingWord = [];
 
-    for(var i = 0; i < userGuess.length; i++){
-        if(letter === userGuess[i]){
-            userGuess[i] = letter;
-            letterPressed = true;
-        }
+    for (var i = 0, j = wordToMatch.length; i < j; i++) {
 
-        if(userGuess.join("")=== letterGuess){
-            wins++;
-            gameRun = false;
+        if (wordToMatch[i] === " ") {
+            guessingWord.push(" ");
+        } else {
+            guessingWord.push("_");
         }
     }
+    updateDisplay();
 }
 
+function updateDisplay() {
+    document.getElementById("winCount").innerHTML = winCount;
+    document.getElementById("correct-word").innerHTML = guessingWord.join("");
+    document.getElementById("guess-count").innerHTML = numGuess;
+    document.getElementById("letters-guessed").innerHTML = guessedLetters.join(" ");
+}
 
 
 
