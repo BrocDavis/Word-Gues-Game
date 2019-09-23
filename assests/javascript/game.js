@@ -8,18 +8,21 @@ var wordToMatch;
 var numGuess;
 var winCount = 0;
 
+//reset display to start game
 reset();
+//make sure to only grab key press of letters on keyboard
 document.onkeypress = function (event) {
 
     if (isAlpha(event.key) && !gameStop) {
         checkForLetter(event.key.toUpperCase());
     }
 }
+//for letter pressed check to the guessingWord values and update when correct and wrong to Wrong letters
 
 function checkForLetter(letter) {
     var foundLetter = false;
 
-    for (var i = 0, j = wordToMatch.length; i < j; i++) {
+    for (var i = 0; i < wordToMatch.length;  i++) {
         if (letter === wordToMatch[i]) {
             guessingWord[i] = letter;
             foundLetter = true;
@@ -44,10 +47,10 @@ function checkForLetter(letter) {
         if (numGuess === 0) {
             guessingWord = wordToMatch.split();
             gameStop = true;
-            setTimeout(reset, 3000);
+            setTimeout(reset, 3000); //slight pause for player to confirm they have the correct word
         }
     }
-    updateDisplay();
+    updateDisplay();//making sure to update letters for each state
 }
 
 function isAlpha(ch) {
@@ -64,7 +67,7 @@ function reset() {
     guessedLetters = [];
     guessingWord = [];
 
-    for (var i = 0, j = wordToMatch.length; i < j; i++) {
+    for (var i = 0; i < wordToMatch.length; i++) {
 
         if (wordToMatch[i] === " ") {
             guessingWord.push(" ");
@@ -74,7 +77,7 @@ function reset() {
     }
     updateDisplay();
 }
-
+//updating screen after each wrong or right answer
 function updateDisplay() {
     document.getElementById("winCount").innerHTML = winCount;
     document.getElementById("correct-word").innerHTML = guessingWord.join("");
