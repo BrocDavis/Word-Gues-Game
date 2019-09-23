@@ -1,5 +1,5 @@
 var wordBank = ["boat", "water", "ski", "wakebord", "float", "swim", "tube", "anchor", "waves", ""];
-var maxGuess = 10;
+var maxGuess = 7;
 var gameStop = false;
 
 var guessedLetters = [];
